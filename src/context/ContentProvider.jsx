@@ -11,6 +11,7 @@ const ContentProvider = ({children}) => {
   const [token, setToken] = useState(localStorage.getItem('token')|| '')
 
   const [blogs, setBlogs] = useState([]);
+  const [comments, setComments] = useState([]);
   const [darshboardData, setDarshboardData] = useState({recentBlogs : [{
     category:'',
     createdAt:'',
@@ -56,16 +57,34 @@ const ContentProvider = ({children}) => {
     }
   }
 
+  const fetchComments = async () => {
+    try {
+      
+      const {data} = await axios.get(backend_url + '/api/v1/admin/comments', {headers:{'token': token}});
+
+      if(data.success){
+        setComments(data.data);
+        toast.success('comments retrieved')
+      }else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }
+  }
+
   
   useEffect(() => {
-    fetchBlogs()
+    fetchBlogs();
+    fetchComments();
   }, [])
   
   const value = {
     token, setToken,
     backend_url,
     blogs, setBlogs, fetchBlogs,
-    darshboardData, setDarshboardData, fetchDarshboardData
+    darshboardData, setDarshboardData, fetchDarshboardData,
+    comments, setComments, fetchComments
   }
   return (
     <AppContent.Provider value={value}>

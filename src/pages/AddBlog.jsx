@@ -16,11 +16,13 @@ const AddBlog = () => {
   const [category, setCategory] = useState('');
   const [published, setPublish] = useState(false);
   const [image, setImage] = useState('');
+  const [isAdding, setIsAdding] = useState(false);
 
 
 
   const handleSubmit = async(e) => {
     e.preventDefault()
+    setIsAdding(true)
     try {
       const formData = new FormData();
 
@@ -40,6 +42,8 @@ const AddBlog = () => {
       }
     } catch (error) {
       toast.error(error.message)
+    }finally{
+      setIsAdding(false);
     }
   };
 
@@ -192,11 +196,12 @@ const AddBlog = () => {
                   <span>Preview</span>
                 </button>
                 <button
+                  disabled={isAdding}
                   type="submit"
                   className="flex cursor-pointer items-center space-x-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   <Save size={16} />
-                  <span className='text-sm'>Upload Blog</span>
+                  <span className='text-sm'>{isAdding ? 'Uploading...' : 'Upload Blog'}</span>
                 </button>
               </div>
             </div>
