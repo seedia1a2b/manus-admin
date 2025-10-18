@@ -16,7 +16,6 @@ const Login = () => {
 
   const handleForm = async (e) => {
     e.preventDefault()
-    console.log('entered')
     setIsLoginIn(true)
 
     try {
@@ -41,6 +40,7 @@ const Login = () => {
       setPassword('')
     }
   }
+  
   return (
     <div className='flex items-center justify-center h-screen'>
       <div className='w-full max-w-sm p-6 max-md:m-6 border border-blue-600/30 shadow-xl shadow-blue-500/15 rounded-lg'>
