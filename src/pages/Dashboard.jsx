@@ -1,7 +1,14 @@
+import { useAppContext } from '@/context/ContentProvider';
 import Layout from '../components/layout/Layout';
 import { Eye, MessageCircle, ThumbsUp, TrendingUp } from 'lucide-react';
+import { useEffect } from 'react';
+import moment from 'moment';
 
 const Dashboard = () => {
+
+  const {fetchDarshboardData, darshboardData, blogs} = useAppContext();
+
+
   const stats = [
     {
       title: 'Total Views',
@@ -19,7 +26,7 @@ const Dashboard = () => {
     },
     {
       title: 'Comments',
-      value: '456',
+      value: `${darshboardData.comments}`,
       change: '+8%',
       icon: MessageCircle,
       color: 'bg-yellow-500'
@@ -68,6 +75,10 @@ const Dashboard = () => {
     }
   ];
 
+  useEffect(()=> {
+    fetchDarshboardData();
+  },[blogs])
+
   return (
     <Layout title="Dashboard" subtitle="Welcome back! Here's what's happening with your blog.">
       <div className="space-y-6">
@@ -104,43 +115,43 @@ const Dashboard = () => {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Title
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 max-[530px]:hidden py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 max-lg:hidden py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Views
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 max-lg:hidden py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Comments
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 max-lg:hidden py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Date
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {recentPosts.map((post) => (
-                  <tr key={post.id} className="hover:bg-gray-50">
+              <tbody className="bg-white divide-y max-sm:text-xs divide-gray-200">
+                {darshboardData.recentBlogs.map((post) => (
+                  <tr key={post._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-gray-900">{post.title}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        post.status === 'Published' 
+                    <td className="px-6 py-4 whitespace-nowrap max-[530px]:hidden">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-[5xl] ${
+                        post.isPublished 
                           ? 'bg-green-100 text-green-800' 
                           : 'bg-yellow-100 text-yellow-800'
                       }`}>
-                        {post.status}
+                        {post.isPublished ? 'Published' : 'Unpublished'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {post.views.toLocaleString()}
+                    <td className="px-6 max-lg:hidden py-4 whitespace-nowrap text-sm text-gray-900">
+                      {0}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {post.comments}
+                    <td className="px-6 max-lg:hidden py-4 whitespace-nowrap text-sm text-gray-900">
+                      {darshboardData.comments}
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      {post.date}
+                    <td className="px-6 max-lg:hidden py-4 whitespace-nowrap text-sm text-gray-500">
+                      {moment(post.createdAt).fromNow()}
                     </td>
                   </tr>
                 ))}

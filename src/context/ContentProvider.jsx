@@ -1,0 +1,81 @@
+import { meta } from '@eslint/js';
+import axios from 'axios';
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import toast from 'react-hot-toast';
+
+const AppContent  = createContext();
+
+
+const ContentProvider = ({children}) => {
+
+  const [token, setToken] = useState(localStorage.getItem('token')|| '')
+
+  const [blogs, setBlogs] = useState([]);
+  const [darshboardData, setDarshboardData] = useState({recentBlogs : [{
+    category:'',
+    createdAt:'',
+    description:'',
+    subTitle:'',
+    title:'',
+    updatedAt:'',
+    _id:'',
+    image:''
+  }]});
+
+  
+  
+  
+  const backend_url = import.meta.env.VITE_BACKEND_URL;
+  console.log(backend_url)
+  
+  const fetchBlogs = async () => {
+    try {
+      const {data} = await axios.get(backend_url + '/api/v1/admin/blogs',{headers:{'token':token}})
+      if(data.success){
+        setBlogs(data.data);
+        toast.success('data retrieved');
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message + 'something went wrong');
+    }
+  }
+  const fetchDarshboardData = async () => {
+    try {
+      const {data} = await axios.get(backend_url + '/api/v1/admin/darshboardData',{headers:{'token':token}});
+      if(data.success){
+        setDarshboardData(data.data);
+        console.log(data.data)
+        toast.success('data retrieved');
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message + 'something went wrong');
+    }
+  }
+
+  
+  useEffect(() => {
+    fetchBlogs()
+  }, [])
+  
+  const value = {
+    token, setToken,
+    backend_url,
+    blogs, setBlogs, fetchBlogs,
+    darshboardData, setDarshboardData, fetchDarshboardData
+  }
+  return (
+    <AppContent.Provider value={value}>
+      {children}
+    </AppContent.Provider>
+  )
+}
+
+export default ContentProvider
+
+export const useAppContext = () => {
+  return useContext(AppContent);
+}

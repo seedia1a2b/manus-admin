@@ -3,13 +3,12 @@ import { Bell, Search, User } from 'lucide-react';
 const Header = ({ title, subtitle }) => {
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between max-lg:flex-col max-sm:justify-start max-lg:items-start max-sm:gap-y-4">
         {/* Title Section */}
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 max-md:text-xl">{title}</h1>
           {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
         </div>
-
         {/* Right Section */}
         <div className="flex items-center space-x-4">
           {/* Search */}
@@ -18,12 +17,12 @@ const Header = ({ title, subtitle }) => {
             <input
               type="text"
               placeholder="Search..."
-              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-64"
+              className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent w-44 flex-1"
             />
           </div>
 
           {/* Notifications */}
-          <button className="relative p-2 text-gray-600 hover:bg-gray-50 rounded-lg">
+          <button className="relative p-2 text-gray-600 hover:bg-gray-50 rounded-lg max-sm:hidden">
             <Bell size={20} />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
           </button>

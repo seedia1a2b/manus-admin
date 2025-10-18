@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Search, Filter, Edit, Trash2, Eye, MoreHorizontal } from 'lucide-react';
+import axios from 'axios';
+import { useAppContext } from '@/context/ContentProvider';
+import toast from 'react-hot-toast';
+import moment from 'moment';
 
 const AllBlogs = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+
+  const {blogs, fetchBlogs, backend_url, token} = useAppContext();
 
   const blogPosts = [
     {
@@ -64,7 +70,26 @@ const AllBlogs = () => {
     }
   ];
 
-  const filteredPosts = blogPosts.filter(post => {
+  const deleteBlog = async ({id}) => {
+    try {
+      const {data} = await axios.post(backend_url + '/api/v1/blog/delete', {id}, {headers:{'token':token}})
+      if(data.success){
+        toast.success(data.message);
+      }else{
+        toast.error(data.message)
+      }
+    } catch (error) {
+      toast.error(error.message)
+    }finally{
+      fetchBlogs();
+    }
+  }
+
+  useEffect(()=>{
+    fetchBlogs()
+  },[])
+
+  const filteredPosts = blogs.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          post.category.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || post.status.toLowerCase() === statusFilter;
@@ -72,13 +97,11 @@ const AllBlogs = () => {
   });
 
   const getStatusColor = (status) => {
-    switch (status.toLowerCase()) {
-      case 'published':
+    switch (status) {
+      case true:
         return 'bg-green-100 text-green-800';
-      case 'draft':
+      case false:
         return 'bg-yellow-100 text-yellow-800';
-      case 'scheduled':
-        return 'bg-blue-100 text-blue-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
@@ -113,8 +136,7 @@ const AllBlogs = () => {
                 >
                   <option value="all">All Status</option>
                   <option value="published">Published</option>
-                  <option value="draft">Draft</option>
-                  <option value="scheduled">Scheduled</option>
+                  <option value="draft">un-published</option>
                 </select>
               </div>
             </div>
@@ -128,7 +150,7 @@ const AllBlogs = () => {
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredPosts.map((post) => (
-            <div key={post.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+            <div key={post._id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
               {/* Image */}
               <div className="h-48 bg-gray-200 relative">
                 <img
@@ -137,8 +159,8 @@ const AllBlogs = () => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute top-3 right-3">
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(post.status)}`}>
-                    {post.status}
+                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(post.isPublished)}`}>
+                    {post.isPublished}
                   </span>
                 </div>
               </div>
@@ -159,16 +181,16 @@ const AllBlogs = () => {
                 </h3>
 
                 <p className="text-sm text-gray-500 mb-3">
-                  By {post.author} • {post.date}
+                  By Demba Sidebeh • {moment(post.createdAt).fromNow()}
                 </p>
 
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                   <div className="flex items-center space-x-4">
                     <span className="flex items-center space-x-1">
                       <Eye size={14} />
-                      <span>{post.views.toLocaleString()}</span>
+                      <span>{0}</span>
                     </span>
-                    <span>{post.comments} comments</span>
+                    <span>{0} comments</span>
                   </div>
                 </div>
 
@@ -178,7 +200,7 @@ const AllBlogs = () => {
                     <Edit size={14} />
                     <span>Edit</span>
                   </button>
-                  <button className="flex items-center justify-center px-3 py-2 text-sm text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors">
+                  <button onClick={()=> deleteBlog({id:post._id})} className="flex cursor-pointer hover:scale-105 active:scale-100 duration-75 items-center justify-center px-3 py-2 text-sm text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors">
                     <Trash2 size={14} />
                   </button>
                 </div>

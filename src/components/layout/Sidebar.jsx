@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, 
   PlusCircle, 
@@ -9,8 +9,22 @@ import {
   User,
   LogOut
 } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+
+
+
 
 const Sidebar = () => {
+
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login')
+  }
+
+
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -25,22 +39,22 @@ const Sidebar = () => {
 
   return (
     <div className={`bg-white border-r border-gray-200 transition-all duration-300 ${
-      isCollapsed ? 'w-16' : 'w-64'
-    } min-h-screen flex flex-col`}>
+      isCollapsed ? 'w-20' : 'w-64'
+    } max-sm:w-20 min-h-screen flex flex-col`}>
       {/* Header */}
       <div className="p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
           {!isCollapsed && (
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center max-sm:justify-end space-x-2 max-sm:space-x-0">
               <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">Q</span>
               </div>
-              <span className="font-semibold text-gray-900">QuickBlog</span>
+              <span className="font-semibold text-gray-900 max-sm:hidden">QuickBlog</span>
             </div>
           )}
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="p-1 rounded-md hover:bg-gray-100"
+            className="p-1 rounded-md hover:bg-gray-100 max-sm:hidden"
           >
             <div className="w-4 h-4 flex flex-col justify-center space-y-1">
               <div className="w-full h-0.5 bg-gray-600"></div>
@@ -66,8 +80,8 @@ const Sidebar = () => {
                       : 'text-gray-700 hover:bg-gray-50'
                   }`}
                 >
-                  <Icon size={20} />
-                  {!isCollapsed && <span className="font-medium">{item.label}</span>}
+                  <Icon size={20}/>
+                  {!isCollapsed && <span className="font-medium max-sm:hidden">{item.label}</span>}
                 </Link>
               </li>
             );
@@ -76,27 +90,27 @@ const Sidebar = () => {
       </nav>
 
       {/* User Profile */}
-      <div className="p-4 border-t border-gray-200">
-        <div className="flex items-center space-x-3">
+      <div className="p-4 max-sm:p-2 border-t border-gray-200">
+        <div className="flex items-center space-x-3 max-sm:justify-center max-sm:space-x-0">
           <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
             <User size={16} className="text-gray-600" />
           </div>
           {!isCollapsed && (
-            <div className="flex-1">
+            <div className="flex-1 max-sm:hidden">
               <p className="text-sm font-medium text-gray-900">Admin User</p>
               <p className="text-xs text-gray-500">admin@quickblog.com</p>
             </div>
           )}
         </div>
         {!isCollapsed && (
-          <div className="mt-3 flex space-x-2">
-            <button className="flex-1 flex items-center justify-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 rounded">
+          <div className="mt-3 flex space-x-2 max-sm:space-x-0 max-sm:flex-col gap-y-2">
+            <button className="flex-1 flex items-center justify-center  space-x-1 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 rounded">
               <Settings size={12} />
-              <span>Settings</span>
+              <span className='max-sm:hidden'>Settings</span>
             </button>
-            <button className="flex-1 flex items-center justify-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 rounded">
+            <button onClick={()=> handleLogout ()} className="flex-1 cursor-pointer flex items-center justify-center space-x-1 px-2 py-1 text-xs text-gray-600 hover:bg-gray-50 rounded">
               <LogOut size={12} />
-              <span>Logout</span>
+              <span className='max-sm:hidden'>Logout</span>
             </button>
           </div>
         )}
