@@ -99,6 +99,7 @@ const Comments = () => {
       toast.error(error.message)
     }finally{
       setIsLoading(false);
+      fetchComments();
     }
   };
 
@@ -115,6 +116,7 @@ const Comments = () => {
       toast.error(error.message)
     }finally{
       setIsLoading(false);
+      fetchComments();
     }
     console.log('Reject comment:', commentId);
   };
@@ -158,7 +160,7 @@ const Comments = () => {
                   onChange={(e) => setStatusFilter(e.target.value)}
                   className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
                 >
-                  <option value="all">All Comments</option>
+                  <option  value="all">All Comments</option>
                   <option value={true}>Approved</option>
                   <option value={false}>Pending</option>
                 </select>
@@ -226,10 +228,10 @@ const Comments = () => {
                           <div>
                             <button
                               onClick={() => handleReject(comment._id)}
-                              className="flex items-center space-x-1 px-3 py-1 text-sm text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
+                              className="flex cursor-pointer hover:scale-105 active:scale-100 duration-100 items-center space-x-1 px-3 py-1 text-sm text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition-colors"
                             >
                               <X size={14} />
-                              <span>Reject</span>
+                              <span>{isLoading ? 'Disapproving...' : 'Reject'}</span>
                             </button>
                           </div>
                         )

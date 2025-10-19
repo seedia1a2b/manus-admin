@@ -19,7 +19,7 @@ const Dashboard = () => {
     },
     {
       title: 'Total Posts',
-      value: '89',
+      value: blogs.length,
       change: '+5%',
       icon: TrendingUp,
       color: 'bg-green-500'

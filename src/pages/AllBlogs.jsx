@@ -10,7 +10,7 @@ const AllBlogs = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
-  const {blogs, fetchBlogs, backend_url, token} = useAppContext();
+  const {blogs, fetchBlogs, backend_url, token, comments} = useAppContext();
 
   const blogPosts = [
     {
@@ -83,6 +83,19 @@ const AllBlogs = () => {
     }finally{
       fetchBlogs();
     }
+  }
+
+
+  const findCommentCount = (blogId) => {
+    let count = 0;
+    comments.map((item) => {
+      console.log(item.blog._id)
+      console.log(blogId)
+      if(item.blog._id === blogId){
+        count ++
+      }
+    })
+    return count;
   }
 
   useEffect(()=>{
@@ -190,7 +203,7 @@ const AllBlogs = () => {
                       <Eye size={14} />
                       <span>{0}</span>
                     </span>
-                    <span>{0} comments</span>
+                    <span>{findCommentCount(post._id)} comments</span>
                   </div>
                 </div>
 
