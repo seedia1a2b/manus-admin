@@ -88,6 +88,7 @@ const Comments = () => {
 
   const handleApprove = async (commentId) => {
     setIsLoading(true);
+    console.log('test console')
     try {
       const { data } = await axios.post(backend_url + '/api/v1/comment/toggle-approve', {id: commentId}, {headers:{'token': token}});
       if(data.success){
