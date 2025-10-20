@@ -6,7 +6,7 @@ import moment from 'moment';
 
 const Dashboard = () => {
 
-  const {fetchDarshboardData, darshboardData, blogs} = useAppContext();
+  const {fetchDarshboardData, darshboardData, blogs, findCommentCount} = useAppContext();
 
 
   const stats = [
@@ -148,7 +148,7 @@ const Dashboard = () => {
                       {0}
                     </td>
                     <td className="px-6 max-lg:hidden py-4 whitespace-nowrap text-sm text-gray-900">
-                      {darshboardData.comments}
+                      {findCommentCount(post._id)}
                     </td>
                     <td className="px-6 max-lg:hidden py-4 whitespace-nowrap text-sm text-gray-500">
                       {moment(post.createdAt).fromNow()}

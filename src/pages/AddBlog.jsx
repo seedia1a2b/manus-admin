@@ -118,7 +118,7 @@ const AddBlog = () => {
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-gray-400 transition-colors">
                   <Upload className="mx-auto h-12 w-12 text-gray-400" />
                   <div className="mt-4">
-                    <label htmlFor="image-upload" className="cursor-pointer flex justify-center">
+                    <label htmlFor="image-upload" className="cursor-pointer flex justify-center flex-col gap-2">
                       {
                         image ? <img className='max-w-54 rounded-sm' src={URL.createObjectURL(image)} alt="" /> 
                         :

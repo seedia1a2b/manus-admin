@@ -42,6 +42,18 @@ const ContentProvider = ({children}) => {
       toast.error(error.message + 'something went wrong');
     }
   }
+
+    const findCommentCount = (blogId) => {
+    let count = 0;
+    comments.map((item) => {
+      console.log(item.blog._id)
+      console.log(blogId)
+      if(item.blog._id === blogId){
+        count ++
+      }
+    })
+    return count;
+  }
   const fetchDarshboardData = async () => {
     try {
       const {data} = await axios.get(backend_url + '/api/v1/admin/darshboardData',{headers:{'token':token}});
@@ -84,7 +96,7 @@ const ContentProvider = ({children}) => {
     backend_url,
     blogs, setBlogs, fetchBlogs,
     darshboardData, setDarshboardData, fetchDarshboardData,
-    comments, setComments, fetchComments
+    comments, setComments, fetchComments, findCommentCount
   }
   return (
     <AppContent.Provider value={value}>

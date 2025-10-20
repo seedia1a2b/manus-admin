@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
-import { Search, Filter, Check, X, Reply, Flag, User } from 'lucide-react';
+import { Search, Filter, Check, X, Reply, Flag, User, Trash } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useAppContext } from '@/context/ContentProvider';
 import moment from 'moment';
@@ -11,6 +11,7 @@ const Comments = () => {
   const [statusFilter, setStatusFilter] = useState('all');
   const {comments, fetchComments, backend_url, token} = useAppContext();
   const [isLoading, setIsLoading] = useState();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // const comments = [
   //   {
@@ -121,14 +122,23 @@ const Comments = () => {
     }
     console.log('Reject comment:', commentId);
   };
-
-  const handleReply = (commentId) => {
-    console.log('Reply to comment:', commentId);
-  };
-
-  const handleFlag = (commentId) => {
-    console.log('Flag comment:', commentId);
-  };
+  
+  const deleteComment = async (id) => {
+    setIsDeleting(true)
+    try {
+      const { data } = await axios.post(backend_url + '/api/v1/comment/delete-comment', {id}, {headers:{'token': token}});
+      if(data.success){
+        toast.success(data.message);
+      }else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.message(error.message)
+    }finally{
+      fetchComments()
+      setIsDeleting(false)
+    }
+  }
 
   useEffect(()=> {
     fetchComments();
@@ -210,10 +220,10 @@ const Comments = () => {
                     </div>
 
                     {/* Actions */}
-                    <div className={`flex space-x-2 ${comment.isApproved ? 'flex-col items-start gap-y-2': ''}`}>
+                    <div className={`flex space-x-2 ${comment.isApproved ? 'items-end gap-y-2': ''}`}>
                       {
                         !comment.isApproved ? (
-                          <div className='flex gap-2 mt-2'>
+                          <div className='flex gap-2'>
                             <div>
                               <button
                                 onClick={() => handleApprove(comment._id)}
@@ -237,7 +247,17 @@ const Comments = () => {
                           </div>
                         )
                       }
-                      
+                      <div>
+                        <button disabled={isDeleting}  onClick={()=> deleteComment(comment._id)}>
+                          {
+                            isDeleting ? (
+                              'deleting...'
+                            ): (
+                              <Trash className='w-4 cursor-pointer hover:scale-105 active:scale-100 duration-100' />
+                            )
+                          }
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

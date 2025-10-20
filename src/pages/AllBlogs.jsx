@@ -9,8 +9,11 @@ import moment from 'moment';
 const AllBlogs = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [show, setShow] = useState(false);
+  const [isPublishing, setIsPublishing] = useState(false);
+  const [isUnublishing, setIsUnpublishing] = useState(false);
 
-  const {blogs, fetchBlogs, backend_url, token, comments} = useAppContext();
+  const {blogs, fetchBlogs, backend_url, token, findCommentCount} = useAppContext();
 
   const blogPosts = [
     {
@@ -85,17 +88,27 @@ const AllBlogs = () => {
     }
   }
 
+  const showContent = () => {
+    setShow(prev => !prev);
+  }
 
-  const findCommentCount = (blogId) => {
-    let count = 0;
-    comments.map((item) => {
-      console.log(item.blog._id)
-      console.log(blogId)
-      if(item.blog._id === blogId){
-        count ++
+  const togglePublish = async (id) => {
+    setIsPublishing(true);
+    try {
+      const { data } = await axios.post(backend_url + '/api/v1/blog/toggle-publish', {id}, {headers:{'token': token}});
+
+      if(data.success){
+        toast.success(data.message)
+      }else{
+        toast.error(data.message)
       }
-    })
-    return count;
+    } catch (error) {
+      toast.error(error.message)
+    }finally{
+      setIsPublishing(false);
+      fetchBlogs();
+      setShow(false);
+    }
   }
 
   useEffect(()=>{
@@ -180,13 +193,21 @@ const AllBlogs = () => {
 
               {/* Content */}
               <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs font-medium text-blue-600 bg-blue-50 px-2 py-1 rounded">
-                    {post.category}
-                  </span>
-                  <button className="p-1 hover:bg-gray-100 rounded">
-                    <MoreHorizontal size={16} className="text-gray-400" />
-                  </button>
+                <div className={`flex ${show? 'items-start': 'items-center'} relative  justify-between mb-2`}>
+                  <div className='flex max-sm:flex-col gap-2 items-center max-sm:items-start'>
+                    <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                      {post.category}
+                    </span>
+                    <p className={`p-0.5 px-4 rounded-xl text-sm  ${post.isPublished ? 'bg-green-500/50 text-white ': 'bg-yellow-300'}`}>{post.isPublished ? 'published' : 'unpublished'}</p>
+                  </div>
+                  <div className='flex flex-col group items-end'>
+                    <button  onClick={()=> showContent()} className="p-1  cursor-pointer bg-gray-100 rounded ">
+                      <MoreHorizontal size={16} className="text-gray-400" />
+                    </button>
+                    <div className={`${show ? 'block absolute -bottom-10' : 'hidden'}  transform duration-100 flex flex-col gap-2 bg-blue-600 border-2 border-blue-300 rounded-sm p-1`}>
+                      <p  disabled={isPublishing} onClick={()=> togglePublish(post._id)} className={`text-sm cursor-pointer text-white bg-blue-400 py-1 px-4 rounded-sm`}>{post.isPublished ? `${isPublishing ? 'publishing...' : 'Unpublish'}`: `${isPublishing ? 'unpblishing' : 'publish'}`}</p>
+                    </div>
+                  </div>
                 </div>
 
                 <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
