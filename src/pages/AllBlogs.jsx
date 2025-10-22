@@ -116,9 +116,12 @@ const AllBlogs = () => {
   },[])
 
   const filteredPosts = blogs.filter(post => {
-    const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         post.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === 'all' || post.status.toLowerCase() === statusFilter;
+    const matchesSearch = searchTerm === '' || post.title.toLowerCase().includes(searchTerm.toLowerCase()) || post.category.toLowerCase().includes(searchTerm.toLowerCase());
+    console.log(matchesSearch);
+
+    console.log(post.isPublished, statusFilter)
+                         
+    const matchesStatus = statusFilter === 'all' || JSON.stringify(post.isPublished) === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
@@ -161,8 +164,8 @@ const AllBlogs = () => {
                   className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent appearance-none bg-white"
                 >
                   <option value="all">All Status</option>
-                  <option value="published">Published</option>
-                  <option value="draft">un-published</option>
+                  <option value={true}>Published</option>
+                  <option value={false}>Unpublished</option>
                 </select>
               </div>
             </div>

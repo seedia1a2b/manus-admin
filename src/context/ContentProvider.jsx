@@ -66,6 +66,8 @@ const ContentProvider = ({children}) => {
       }
     } catch (error) {
       toast.error(error.message + 'something went wrong');
+    }finally{
+      fetchComments();
     }
   }
 
