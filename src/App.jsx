@@ -7,6 +7,7 @@ import './App.css';
 import Login from './pages/Login';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { useAppContext } from './context/ContentProvider';
 
 
 function App() {
