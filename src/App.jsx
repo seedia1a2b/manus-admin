@@ -4,7 +4,6 @@ import AddBlog from './pages/AddBlog';
 import AllBlogs from './pages/AllBlogs';
 import Comments from './pages/Comments';
 import './App.css';
-import { useAppContext } from './context/contentProvider';
 import Login from './pages/Login';
 import { useEffect } from 'react';
 import { Toaster } from 'react-hot-toast';
