@@ -9,7 +9,6 @@ import {
   User,
   LogOut
 } from 'lucide-react';
-import { useAppContext } from '@/context/ContentProvider';
 
 
 

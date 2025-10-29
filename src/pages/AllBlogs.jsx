@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Search, Filter, Edit, Trash2, Eye, MoreHorizontal } from 'lucide-react';
 import axios from 'axios';
-import { useAppContext } from '@/context/ContentProvider';
+import { useAppContext } from '../context/ContentProvider';
 import toast from 'react-hot-toast';
 import moment from 'moment';
 

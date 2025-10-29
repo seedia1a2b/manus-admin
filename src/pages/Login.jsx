@@ -1,4 +1,4 @@
-import { useAppContext } from '@/context/contentProvider'
+import { useAppContext } from '../context/ContentProvider'
 import axios from 'axios'
 import React, { useState } from 'react'
 import toast from 'react-hot-toast';

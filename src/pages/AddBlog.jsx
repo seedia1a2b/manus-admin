@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Upload, Save, Eye } from 'lucide-react';
 import axios from 'axios';
-import { useAppContext } from '@/context/ContentProvider';
+import { useAppContext } from '../context/ContentProvider';
 import toast from 'react-hot-toast';
 
 const AddBlog = () => {

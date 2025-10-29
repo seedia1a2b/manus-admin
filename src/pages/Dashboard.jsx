@@ -1,4 +1,4 @@
-import { useAppContext } from '@/context/ContentProvider';
+import { useAppContext } from '../context/ContentProvider';
 import Layout from '../components/layout/Layout';
 import { Eye, MessageCircle, ThumbsUp, TrendingUp } from 'lucide-react';
 import { useEffect } from 'react';
