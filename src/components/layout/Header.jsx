@@ -1,9 +1,11 @@
 import { Bell, Search, User } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const Header = ({ title, subtitle }) => {
   return (
     <header className="bg-white border-b border-gray-200 px-6 py-4">
-      <div className="flex items-center justify-between max-lg:flex-col max-sm:justify-start max-lg:items-start max-sm:gap-y-4">
+      <motion.div
+      className="flex items-center justify-between max-lg:flex-col max-sm:justify-start max-lg:items-start max-sm:gap-y-4">
         {/* Title Section */}
         <div className='flex gap-x-2 sm:items-center max-sm:flex-col '>
           <h1 className="text-2xl font-bold text-gray-900 max-md:text-xl">{title}</h1>
@@ -38,7 +40,7 @@ const Header = ({ title, subtitle }) => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </header>
   );
 };
