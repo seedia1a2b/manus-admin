@@ -22,11 +22,27 @@ const ContentProvider = ({children}) => {
     _id:'',
     image:''
   }]});
-
-  
-  
-  
   const backend_url = import.meta.env.VITE_BACKEND_URL;
+
+  const [adminEmail, setAdminEmail] = useState([]);
+
+
+  const fetchAdminData = async () => {
+
+    try {
+      const { data } = await axios.post(backend_url + '/api/v1/admin/adminData', {}, {headers:{'token': token}});
+      console.log(data)
+      if(data){
+        setAdminEmail(data.admin);
+        localStorage.setItem('AdminData', JSON.stringify(data.admin));
+      }else{
+        toast.error(data.message);
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
+  
   console.log(backend_url)
   
   const fetchBlogs = async () => {
@@ -46,8 +62,6 @@ const ContentProvider = ({children}) => {
     const findCommentCount = (blogId) => {
     let count = 0;
     comments.map((item) => {
-      console.log(item.blog._id)
-      console.log(blogId)
       if(item.blog._id === blogId){
         count ++
       }
@@ -59,7 +73,6 @@ const ContentProvider = ({children}) => {
       const {data} = await axios.get(backend_url + '/api/v1/admin/darshboardData',{headers:{'token':token}});
       if(data.success){
         setDarshboardData(data.data);
-        console.log(data.data)
         toast.success('data retrieved');
       }else{
         toast.error(data.message)
@@ -91,6 +104,8 @@ const ContentProvider = ({children}) => {
   useEffect(() => {
     fetchBlogs();
     fetchComments();
+    fetchAdminData();
+    console.log(adminEmail);
   }, [])
   
   const value = {
@@ -98,7 +113,8 @@ const ContentProvider = ({children}) => {
     backend_url,
     blogs, setBlogs, fetchBlogs,
     darshboardData, setDarshboardData, fetchDarshboardData,
-    comments, setComments, fetchComments, findCommentCount
+    comments, setComments, fetchComments, findCommentCount,
+    adminEmail, setAdminEmail,fetchAdminData
   }
   return (
     <AppContent.Provider value={value}>

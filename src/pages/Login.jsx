@@ -6,11 +6,11 @@ import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
 
-  const {backend_url, setToken} = useAppContext();
+  const {backend_url, setToken, setAdminEmail} = useAppContext();
 
   const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [isLoginIn, setIsLoginIn] = useState(false)
+  const [password, setPassword] = useState('');
+  const [isLoginIn, setIsLoginIn] = useState(false);
 
   const navigate = useNavigate();
 
@@ -21,10 +21,11 @@ const Login = () => {
     try {
 
       const {data} = await axios.post(backend_url + '/api/v1/admin/login', {email, password})
-      console.log(data)
 
       if(data.success){
         setToken(data.token)
+        setAdminEmail(data.data)
+        console.log(data.data)
         localStorage.setItem('token', data.token);
         toast.success('Login successfull')
         navigate('/')

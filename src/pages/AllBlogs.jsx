@@ -198,7 +198,7 @@ const AllBlogs = () => {
               <div className="p-4">
                 <div className={`flex ${show? 'items-start': 'items-center'} relative  justify-between mb-2`}>
                   <div className='flex max-sm:flex-col gap-2 items-center max-sm:items-start'>
-                    <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
+                    <span className="text-xs font-medium text-blue-600 bg-blue-100 px-2 py-1 rounded-full text-nowrap flex-wrap">
                       {post.category}
                     </span>
                     <p className={`p-0.5 px-4 rounded-xl text-sm  ${post.isPublished ? 'bg-green-500/50 text-white ': 'bg-yellow-300'}`}>{post.isPublished ? 'published' : 'unpublished'}</p>

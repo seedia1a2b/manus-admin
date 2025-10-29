@@ -5,9 +5,9 @@ const Header = ({ title, subtitle }) => {
     <header className="bg-white border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between max-lg:flex-col max-sm:justify-start max-lg:items-start max-sm:gap-y-4">
         {/* Title Section */}
-        <div>
+        <div className='flex gap-x-2 sm:items-center max-sm:flex-col '>
           <h1 className="text-2xl font-bold text-gray-900 max-md:text-xl">{title}</h1>
-          {subtitle && <p className="text-sm text-gray-500 mt-1">{subtitle}</p>}
+          {subtitle && <p className="text-sm text-gray-500 max-sm:mb-2">{subtitle}</p>}
         </div>
         {/* Right Section */}
         <div className="flex items-center space-x-4">

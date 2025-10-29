@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Home, 
@@ -9,13 +9,15 @@ import {
   User,
   LogOut
 } from 'lucide-react';
-import toast from 'react-hot-toast';
-
+import { useAppContext } from '@/context/ContentProvider';
 
 
 
 
 const Sidebar = () => {
+
+  const [adminData, setAdminData] = useState([]);
+
 
   const navigate = useNavigate()
 
@@ -23,6 +25,8 @@ const Sidebar = () => {
     localStorage.removeItem('token');
     navigate('/login')
   }
+
+  console.log(adminData)
 
 
   const location = useLocation();
@@ -36,6 +40,12 @@ const Sidebar = () => {
   ];
 
   const isActive = (path) => location.pathname === path;
+
+  useEffect(()=>{
+    if(JSON.parse(localStorage.getItem('AdminData'))){
+      setAdminData(JSON.parse(JSON.parse(localStorage.getItem('AdminData'))))
+    }
+  },[])
 
   return (
     <div className={`bg-white border-r border-gray-200 transition-all duration-300 ${
@@ -98,7 +108,7 @@ const Sidebar = () => {
           {!isCollapsed && (
             <div className="flex-1 max-sm:hidden">
               <p className="text-sm font-medium text-gray-900">Admin User</p>
-              <p className="text-xs text-gray-500">admin@quickblog.com</p>
+              {/* <p className="text-xs text-gray-500">{adminData[0].email}</p> */}
             </div>
           )}
         </div>
