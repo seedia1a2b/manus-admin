@@ -41,8 +41,8 @@ const Sidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   useEffect(()=>{
-    if(JSON.parse(localStorage.getItem('AdminData'))){
-      setAdminData(JSON.parse(JSON.parse(localStorage.getItem('AdminData'))))
+    if(localStorage.getItem('AdminData')){
+      setAdminData(localStorage.getItem('AdminData'));
     }
   },[])
 
